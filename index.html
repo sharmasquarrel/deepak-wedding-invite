@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>दीपक एवं आकांक्षा — विवाह निमंत्रण</title>
+<meta name="description" content="दीपक एवं आकांक्षा के विवाह समारोह में आप सादर आमंत्रित हैं।" />
+
+<!-- Open Graph (for WhatsApp / social sharing) -->
+<meta property="og:title" content="दीपक एवं आकांक्षा — विवाह निमंत्रण" />
+<meta property="og:description" content="हमारे जीवन की नई शुरुआत में सम्मिलित हों। कार्यक्रम का विवरण भीतर है।" />
+<meta property="og:image" content="assets/images/og-preview.svg" />
+<meta property="og:type" content="website" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<!-- Latin faces + Devanagari faces (Noto Serif Devanagari / Mukta) -->
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Marcellus&family=Outfit:wght@200;300;400;500&family=Noto+Serif+Devanagari:wght@300;400;500;600&family=Mukta:wght@200;300;400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml" />
+</head>
+<body class="is-gate">
+
+<!-- ============================================================
+     ENTRY GATE
+     Browsers block audio autoplay until the user interacts once.
+     This overlay captures that first tap and starts the music.
+     It also carries the Hindi / English language toggle.
+
+     TRANSLATION MODEL
+     -----------------
+     Hindi (Devanagari) is the DEFAULT and is written inline as the
+     element's own text. The English version of the same string lives
+     in that element's `data-en` attribute. js/app.js caches the inline
+     Hindi on boot, so switching languages just swaps between the two.
+     To re-word something, edit the inline Hindi and the `data-en`.
+     ============================================================ -->
+<div class="gate" id="gate">
+  <div class="gate__inner">
+
+    <div class="langswitch" role="group" aria-label="भाषा चुनें / Choose language">
+      <button class="langswitch__btn is-on" type="button" data-lang="hi" lang="hi">हिन्दी</button>
+      <button class="langswitch__btn" type="button" data-lang="en" lang="en">English</button>
+    </div>
+
+    <img class="gate__motif" src="assets/images/motif-ganesh.svg" alt="" aria-hidden="true" />
+    <p class="gate__eyebrow">॥ श्री गणेशाय नमः ॥</p>
+    <h1 class="gate__names"><em data-name="groom">दीपक</em> <span data-en="&amp;">एवं</span> <em data-name="bride">आकांक्षा</em></h1>
+    <p class="gate__date" data-en="05 &middot; 12 &middot; 2026">05 &middot; 12 &middot; 2026</p>
+    <button class="gate__btn" id="gateBtn" type="button">
+      <span class="gate__btn-ring"></span>
+      <span data-en="Open Invitation">निमंत्रण खोलें</span>
+    </button>
+    <p class="gate__hint" data-en="Best experienced with sound on">ध्वनि के साथ सर्वोत्तम अनुभव</p>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     FIXED CHROME — progress bar, music control, page dots
+     ============================================================ -->
+<div class="progress" id="progress" aria-hidden="true"><span id="progressFill"></span></div>
+
+<button class="music" id="musicBtn" type="button"
+        aria-label="संगीत चालू / बंद करें" data-aria-en="Toggle music">
+  <svg class="music__icon music__icon--on" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M9 18V5l10-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="16" cy="16" r="3" />
+  </svg>
+  <svg class="music__icon music__icon--off" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M9 18V5l10-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="16" cy="16" r="3" />
+    <line x1="3" y1="21" x2="21" y2="3" />
+  </svg>
+  <span class="music__bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+</button>
+
+<div class="nowplaying" id="nowPlaying" aria-live="polite"></div>
+
+<button class="autoplay-toggle" id="autoBtn" type="button" aria-pressed="true">
+  <span class="autoplay-toggle__dot"></span><span id="autoLabel">स्वतः चल रहा है</span>
+</button>
+
+<nav class="dots" id="dots" aria-label="निमंत्रण के पृष्ठ"></nav>
+
+<button class="nav-arrow nav-arrow--prev" id="prevBtn" type="button"
+        aria-label="पिछला पृष्ठ" data-aria-en="Previous page">&#8249;</button>
+<button class="nav-arrow nav-arrow--next" id="nextBtn" type="button"
+        aria-label="अगला पृष्ठ" data-aria-en="Next page">&#8250;</button>
+
+
+<!-- ============================================================
+     THE PAGES
+     Each <section class="page"> is one auto-advancing screen.
+     `data-label` is the Hindi dot tooltip, `data-label-en` the English.
+     ============================================================ -->
+<main class="deck" id="deck">
+
+  <!-- ---------- 1. GANESH BLESSINGS ---------- -->
+  <section class="page page--ganesh" data-label="आशीर्वाद" data-label-en="Blessings">
+    <div class="page__bg page__bg--mandala"></div>
+    <div class="page__inner">
+      <!-- PLACEHOLDER: replace with your own Ganesha image -->
+      <figure class="ganesh" data-anim="1">
+        <div class="ganesh__halo"></div>
+        <img class="ganesh__img" src="assets/images/ganesh.svg" alt="श्री गणेश" data-alt-en="Lord Ganesha" />
+      </figure>
+
+      <!-- the shloka itself is Devanagari in both languages -->
+      <p class="sanskrit" data-anim="2">वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ ।<br />निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा ॥</p>
+
+      <!-- Hindi: the meaning.  English: the transliteration. -->
+      <p class="translit" data-anim="3"
+         data-en="Vakratunda Mahakaya Suryakoti Samaprabha<br />Nirvighnam Kuru Me Deva Sarva&#8209;Karyeshu Sarvada">वक्र सूँड़ वाले, महाकाय, करोड़ सूर्यों के समान तेजस्वी देव!<br />मेरे समस्त कार्य सदा निर्विघ्न कीजिए।</p>
+
+      <div class="rule" data-anim="4"><span></span>&#10045;<span></span></div>
+      <p class="blessing" data-anim="5"
+         data-en="With the blessings of Lord Ganesha,<br />the remover of obstacles,<br />we begin this auspicious journey.">विघ्नहर्ता श्री गणेश के आशीर्वाद से<br />हम इस शुभ यात्रा का<br />आरम्भ करते हैं।</p>
+    </div>
+  </section>
+
+
+  <!-- ---------- 2. INVITATION MESSAGE ---------- -->
+  <section class="page page--invite" data-label="निमंत्रण" data-label-en="Invitation">
+    <div class="page__bg page__bg--soft"></div>
+    <div class="page__inner">
+      <p class="eyebrow" data-anim="1" data-en="Together with our families">सपरिवार सादर निमंत्रण</p>
+      <h2 class="title" data-anim="2" data-en="You Are Invited">आप आमंत्रित हैं</h2>
+      <div class="rule" data-anim="3"><span></span>&#10045;<span></span></div>
+
+      <!-- PLACEHOLDER: invitation message -->
+      <p class="prose" data-anim="4"
+         data-en="Some moments are too beautiful to keep to ourselves. As we step into a lifetime of togetherness, we would be honoured by the warmth of your presence, your laughter at our table and your blessings on our journey.">कुछ क्षण इतने सुन्दर होते हैं कि उन्हें अपने तक सीमित रखना कठिन है। जीवन भर के साथ की ओर बढ़ते हुए, हमें आपकी उपस्थिति, आपकी हँसी और आपके आशीर्वाद की हार्दिक अभिलाषा है।</p>
+      <p class="prose prose--em" data-anim="5"
+         data-en="Do join us, and make our celebration complete.">पधारकर हमारे इस उत्सव को पूर्ण कीजिए।</p>
+
+      <!-- Each side: the name, then "son/daughter of" and the father.
+           Fathers only — mothers' names are deliberately not listed. -->
+      <div class="families" data-anim="6">
+        <div class="families__col">
+          <p class="families__person" data-name="groom">दीपक</p>
+          <p class="families__label" data-en="Son of">सुपुत्र</p>
+          <p class="families__name" data-en="Mr. Arjun Yadav">श्री अर्जुन यादव</p>
+        </div>
+        <div class="families__sep" aria-hidden="true"></div>
+        <div class="families__col">
+          <p class="families__person" data-name="bride">आकांक्षा</p>
+          <p class="families__label" data-en="Daughter of">सुपुत्री</p>
+          <p class="families__name" data-en="Mr. Shivnath Sharma">श्री शिवनाथ शर्मा</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ---------- 3. GROOM WEDS BRIDE ---------- -->
+  <section class="page page--couple" data-label="वर-वधू" data-label-en="The Couple">
+    <div class="page__bg page__bg--rings"></div>
+    <div class="page__inner page__inner--wide">
+      <div class="couple">
+        <figure class="couple__side" data-anim="1">
+          <!-- PLACEHOLDER: groom's photo -->
+          <div class="portrait">
+            <img src="assets/images/portrait-groom.svg" alt="दीपक, वर" data-alt-en="Deepak, the groom" />
+          </div>
+          <figcaption>
+            <h3 class="couple__name" data-name="groom">दीपक</h3>
+            <p class="couple__meta" data-en="The Groom">वर</p>
+          </figcaption>
+        </figure>
+
+        <div class="couple__weds" data-anim="2">
+          <span class="couple__amp" data-en="weds">विवाह</span>
+          <div class="couple__heart" aria-hidden="true">&#10084;</div>
+        </div>
+
+        <figure class="couple__side" data-anim="3">
+          <!-- PLACEHOLDER: bride's photo -->
+          <div class="portrait">
+            <img src="assets/images/portrait-bride.svg" alt="आकांक्षा, वधू" data-alt-en="Akanksha, the bride" />
+          </div>
+          <figcaption>
+            <h3 class="couple__name" data-name="bride">आकांक्षा</h3>
+            <p class="couple__meta" data-en="The Bride">वधू</p>
+          </figcaption>
+        </figure>
+      </div>
+
+      <p class="couple__line" data-anim="4"
+         data-en="&ldquo;Two souls, one promise &mdash; on 5 December 2026&rdquo;">&ldquo;दो आत्माएँ, एक वचन &mdash; 5 दिसम्बर 2026 को&rdquo;</p>
+    </div>
+  </section>
+
+
+  <!-- ---------- 4. COUNTDOWN ---------- -->
+  <section class="page page--count" data-label="शुभ घड़ी" data-label-en="Countdown">
+    <div class="page__bg page__bg--glow"></div>
+    <div class="page__inner">
+      <p class="eyebrow" data-anim="1" data-en="The wait begins">प्रतीक्षा आरम्भ</p>
+      <h2 class="title" data-anim="2" data-en="Counting Down">शुभ घड़ी की गिनती</h2>
+      <div class="rule" data-anim="3"><span></span>&#10045;<span></span></div>
+
+      <div class="countdown" id="countdown" data-anim="4" role="timer" aria-live="off">
+        <div class="cd"><span class="cd__num" id="cdDays">00</span><span class="cd__lbl" data-en="Days">दिन</span></div>
+        <div class="cd__colon" aria-hidden="true">:</div>
+        <div class="cd"><span class="cd__num" id="cdHours">00</span><span class="cd__lbl" data-en="Hours">घंटे</span></div>
+        <div class="cd__colon" aria-hidden="true">:</div>
+        <div class="cd"><span class="cd__num" id="cdMins">00</span><span class="cd__lbl" data-en="Minutes">मिनट</span></div>
+        <div class="cd__colon" aria-hidden="true">:</div>
+        <div class="cd"><span class="cd__num" id="cdSecs">00</span><span class="cd__lbl" data-en="Seconds">सेकंड</span></div>
+      </div>
+
+      <!-- filled in by js/app.js so it can interpolate the ceremony name -->
+      <p class="countdown__msg" id="countdownMsg" data-anim="5"></p>
+    </div>
+  </section>
+
+
+  <!-- ---------- 5. CEREMONIES ---------- -->
+  <section class="page page--events" data-label="कार्यक्रम" data-label-en="Ceremonies">
+    <div class="page__bg page__bg--soft"></div>
+    <div class="page__inner page__inner--wide">
+      <p class="eyebrow" data-anim="1" data-en="Save the dates">तिथियाँ सुरक्षित रखें</p>
+      <h2 class="title" data-anim="2" data-en="Ceremonies">कार्यक्रम</h2>
+      <div class="rule" data-anim="3"><span></span>&#10045;<span></span></div>
+
+      <!-- PLACEHOLDER: ceremony cards come from CONFIG.ceremonies in js/app.js -->
+      <div class="events" id="events" data-anim="4"></div>
+    </div>
+  </section>
+
+
+  <!-- ---------- 6. GALLERY (one photo every 2s) ---------- -->
+  <section class="page page--gallery" data-label="तस्वीरें" data-label-en="Gallery">
+    <div class="gallery" id="gallery" aria-label="फ़ोटो गैलरी"></div>
+    <div class="gallery__scrim"></div>
+    <div class="page__inner page__inner--bottom">
+      <p class="eyebrow eyebrow--light" data-anim="1" data-en="Moments">यादें</p>
+      <h2 class="title title--light" data-anim="2" data-en="Our Gallery">हमारी तस्वीरें</h2>
+      <p class="prose prose--light" data-anim="3"
+         data-en="A few frames from the story so far.">अब तक की कहानी के कुछ पल।</p>
+      <div class="gallery__thumbs" id="galleryThumbs" data-anim="4"></div>
+    </div>
+  </section>
+
+
+  <!-- ---------- 7. PRE-WEDDING SHOOT — DISABLED FOR NOW ----------
+       To bring this page back, delete the two marker lines below
+       (PREWED-OFF-START / PREWED-OFF-END) and nothing else. The photos,
+       captions and 2-seconds-per-photo timing are all still configured in
+       js/app.js (CONFIG.preWedding, CONFIG.preWeddingInterval), and the page
+       re-registers itself automatically once this markup is back.
+       ---------------------------------------------------------------- -->
+  <!-- PREWED-OFF-START
+  <section class="page page--prewed" data-label="प्री-वेडिंग" data-label-en="Pre-Wedding">
+    <div class="page__bg page__bg--soft"></div>
+    <div class="page__inner page__inner--wide">
+      <p class="eyebrow" data-anim="1" data-en="Shot on location">लोकेशन पर</p>
+      <h2 class="title" data-anim="2" data-en="Pre&#8209;Wedding Shoot">प्री&#8209;वेडिंग शूट</h2>
+      <div class="rule" data-anim="3"><span></span>&#10045;<span></span></div>
+      <div class="shoot" data-anim="4">
+        <div class="shoot__stage" id="prewedStage"></div>
+        <p class="shoot__cap" id="prewedCap" aria-live="polite"></p>
+        <div class="shoot__thumbs" id="prewedThumbs"></div>
+      </div>
+    </div>
+  </section>
+  PREWED-OFF-END -->
+
+
+  <!-- ---------- 8. VENUE & DIRECTIONS ---------- -->
+  <section class="page page--venue" data-label="स्थान" data-label-en="Venue">
+    <div class="page__bg page__bg--mandala"></div>
+    <div class="page__inner">
+      <p class="eyebrow" data-anim="1" data-en="Where it all happens">आयोजन स्थल</p>
+      <h2 class="title" data-anim="2" data-en="The Venue">स्थान</h2>
+      <div class="rule" data-anim="3"><span></span>&#10045;<span></span></div>
+
+      <!-- PLACEHOLDER: venue name + address come from CONFIG.venue* in js/app.js -->
+      <div class="venue" data-anim="4">
+        <h3 class="venue__name" id="venueName"></h3>
+        <p class="venue__addr" id="venueAddr"></p>
+        <div class="venue__actions">
+          <a class="btn btn--primary" id="mapLink"
+             href="https://maps.app.goo.gl/3efXJdLuN12ALKuC9"
+             target="_blank" rel="noopener" data-en="Open in Maps">मैप में देखें</a>
+          <!-- the .ics file is generated in js/app.js from CONFIG -->
+          <a class="btn btn--ghost" id="calLink" href="#" download="wedding.ics"
+             data-en="Add to Calendar">कैलेंडर में जोड़ें</a>
+        </div>
+      </div>
+
+      <div class="contacts" data-anim="5">
+        <p class="contacts__label" data-en="For any assistance">किसी भी सहायता हेतु</p>
+        <div class="contacts__row">
+          <a class="contact" href="tel:+917970705619">
+            <strong data-en="Father of the Groom">वर के पिता</strong><span dir="ltr">+91 79707 05619</span>
+          </a>
+          <a class="contact" href="tel:+917050332827">
+            <strong><span data-name="groom">दीपक</span> <span data-en="(Groom)">(वर)</span></strong><span dir="ltr">+91 70503 32827</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ---------- 9. THANK YOU / RSVP ---------- -->
+  <section class="page page--thanks" data-label="धन्यवाद" data-label-en="Thank You">
+    <div class="page__bg page__bg--glow"></div>
+    <div class="page__inner">
+      <img class="thanks__motif" src="assets/images/motif-floral.svg" alt="" aria-hidden="true" data-anim="1" />
+      <h2 class="title" data-anim="2" data-en="With Love &amp; Gratitude">स्नेह एवं कृतज्ञता सहित</h2>
+      <div class="rule" data-anim="3"><span></span>&#10045;<span></span></div>
+      <p class="prose" data-anim="4"
+         data-en="Your presence is the only gift we ask for. Thank you for being a part of our story &mdash; we cannot wait to celebrate with you.">आपकी उपस्थिति ही हमारे लिए सबसे बड़ा उपहार है। हमारी कहानी का हिस्सा बनने के लिए धन्यवाद &mdash; हम आपके साथ उत्सव मनाने के लिए अत्यंत उत्सुक हैं।</p>
+      <p class="thanks__names" data-anim="5"><span data-name="groom">दीपक</span> <i data-en="&amp;">एवं</i> <span data-name="bride">आकांक्षा</span></p>
+      <div class="thanks__actions" data-anim="6">
+        <a class="btn btn--primary" id="rsvpLink" href="#" target="_blank" rel="noopener"
+           data-en="RSVP on WhatsApp">व्हाट्सएप पर उत्तर दें</a>
+        <button class="btn btn--ghost" id="shareBtn" type="button"
+                data-en="Share Invitation">निमंत्रण साझा करें</button>
+      </div>
+      <p class="thanks__hashtag" data-anim="7" data-name="hashtag">#DeepakWedsAkanksha</p>
+    </div>
+  </section>
+
+</main>
+
+
+<!-- ============================================================
+     AUDIO — one shared player across all pages.
+     Drop your .mp3 files into assets/audio/ and list them
+     in js/app.js -> CONFIG.playlist. Shuffled on every load.
+     ============================================================ -->
+<audio id="audio" preload="none"></audio>
+
+<!-- falling flowers &amp; stars; purely decorative, pointer-events: none -->
+<canvas id="fx" class="fx" aria-hidden="true"></canvas>
+
+<script src="js/app.js"></script>
+</body>
+</html>

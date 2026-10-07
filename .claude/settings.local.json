@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cat)",
+      "Bash(node --check js/app.js)",
+      "Bash(python3 *)",
+      "Bash(pkill -f \"http.server 8787\")",
+      "Bash(pkill -f \"headless\")",
+      "Bash(sips -s format png prewed-1.svg --out /tmp/t1.png)",
+      "Bash(qlmanage -t -s 900 -o /tmp/qlout prewed-1.svg)",
+      "Bash(pkill -f qlmanage)",
+      "Bash(file *.png)",
+      "Bash(sed -n '/ceremonies: \\\\[/,/^    },/p' js/app.js)",
+      "Bash(sed -n '/^function renderCeremonies/,/^}/p' js/app.js)"
+    ]
+  },
+  "disabledMcpjsonServers": [
+    "visa-mcp-hub"
+  ]
+}
